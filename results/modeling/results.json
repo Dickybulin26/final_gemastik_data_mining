@@ -1,0 +1,899 @@
+{
+  "experiments": {
+    "EXP-00": {
+      "name": "Dummy Majority Baseline",
+      "representation": "none",
+      "strategy": "Prediksi kelas mayoritas tanpa fitur",
+      "folds": [
+        0.2456,
+        0.2456,
+        0.2456,
+        0.2456,
+        0.2456
+      ],
+      "mean": 0.2456,
+      "std": 0.0,
+      "config": {
+        "strategy": "most_frequent",
+        "majority_class": "positive"
+      },
+      "runtime_seconds": 0.01
+    },
+    "EXP-01": {
+      "name": "Logistic Regression (balanced, C=1)",
+      "representation": "inductive",
+      "strategy": "Supervised baseline pada TF-IDF inductive (train fold saja)",
+      "folds": [
+        0.5704,
+        0.6891,
+        0.6228,
+        0.696,
+        0.6199
+      ],
+      "mean": 0.6396,
+      "std": 0.0471,
+      "config": {
+        "class_weight": "balanced",
+        "C": 1.0,
+        "max_iter": 1000
+      },
+      "runtime_seconds": 4.13
+    },
+    "EXP-02": {
+      "name": "Calibrated LinearSVC (balanced, C=0.5)",
+      "representation": "inductive",
+      "strategy": "Supervised baseline pada TF-IDF inductive (train fold saja)",
+      "folds": [
+        0.5704,
+        0.5586,
+        0.6342,
+        0.7436,
+        0.6325
+      ],
+      "mean": 0.6279,
+      "std": 0.0656,
+      "config": {
+        "base": "LinearSVC",
+        "class_weight": "balanced",
+        "C": 0.5,
+        "cv": 3
+      },
+      "runtime_seconds": 0.25
+    },
+    "EXP-03": {
+      "name": "Complement Naive Bayes (norm=True)",
+      "representation": "inductive",
+      "strategy": "Supervised baseline pada TF-IDF inductive (train fold saja)",
+      "folds": [
+        0.5669,
+        0.5799,
+        0.4657,
+        0.5598,
+        0.4888
+      ],
+      "mean": 0.5322,
+      "std": 0.0459,
+      "config": {
+        "norm": true
+      },
+      "runtime_seconds": 0.02
+    },
+    "EXP-04": {
+      "name": "Soft Voting Ensemble (LR+SVM+CNB)",
+      "representation": "transductive",
+      "strategy": "Supervised ensemble dengan representasi transductive (TF-IDF fit labeled+unlabeled)",
+      "folds": [
+        0.6503,
+        0.6865,
+        0.5107,
+        0.7882,
+        0.6021
+      ],
+      "mean": 0.6476,
+      "std": 0.0918,
+      "config": {
+        "voting": "soft",
+        "members": [
+          "lr",
+          "calibrated_linearsvc",
+          "cnb"
+        ]
+      },
+      "runtime_seconds": 8.39
+    },
+    "EXP-05": {
+      "name": "Self-training naive (thr>=0.90 global)",
+      "representation": "transductive",
+      "strategy": "Pseudo-label threshold global tanpa kuota per kelas & tanpa pembobotan (demo confirmation bias); teacher=CalibratedLinearSVC",
+      "folds": [
+        0.712,
+        0.7458,
+        0.7593,
+        0.7422,
+        0.6577
+      ],
+      "mean": 0.7234,
+      "std": 0.0363,
+      "config": {
+        "confidence_threshold": 0.9,
+        "top_k_per_class": null,
+        "pseudo_weight": 1.0,
+        "teacher": "calibrated_linearsvc"
+      },
+      "runtime_seconds": 2.38
+    },
+    "EXP-06A": {
+      "name": "CB-PL (thr>=0.85, top-30/kelas, w=0.5)",
+      "representation": "transductive",
+      "strategy": "Self-training Class-Balanced: top-K per kelas + threshold + bobot pseudo 0.5; teacher=CalibratedLinearSVC",
+      "folds": [
+        0.6371,
+        0.7394,
+        0.6342,
+        0.7289,
+        0.6466
+      ],
+      "mean": 0.6772,
+      "std": 0.0467,
+      "config": {
+        "confidence_threshold": 0.85,
+        "top_k_per_class": 30,
+        "pseudo_weight": 0.5,
+        "teacher": "calibrated_linearsvc"
+      },
+      "runtime_seconds": 0.77
+    },
+    "EXP-06B": {
+      "name": "CB-PL (thr>=0.85, top-60/kelas, w=0.5)",
+      "representation": "transductive",
+      "strategy": "Self-training Class-Balanced: top-K per kelas + threshold + bobot pseudo 0.5; teacher=CalibratedLinearSVC",
+      "folds": [
+        0.6822,
+        0.8204,
+        0.6942,
+        0.7582,
+        0.6484
+      ],
+      "mean": 0.7207,
+      "std": 0.0612,
+      "config": {
+        "confidence_threshold": 0.85,
+        "top_k_per_class": 60,
+        "pseudo_weight": 0.5,
+        "teacher": "calibrated_linearsvc"
+      },
+      "runtime_seconds": 0.79
+    },
+    "EXP-06C": {
+      "name": "CB-PL (thr>=0.90, top-30/kelas, w=0.5)",
+      "representation": "transductive",
+      "strategy": "Self-training Class-Balanced: top-K per kelas + threshold + bobot pseudo 0.5; teacher=CalibratedLinearSVC",
+      "folds": [
+        0.6371,
+        0.7394,
+        0.6342,
+        0.7289,
+        0.6466
+      ],
+      "mean": 0.6772,
+      "std": 0.0467,
+      "config": {
+        "confidence_threshold": 0.9,
+        "top_k_per_class": 30,
+        "pseudo_weight": 0.5,
+        "teacher": "calibrated_linearsvc"
+      },
+      "runtime_seconds": 0.78
+    },
+    "EXP-06D": {
+      "name": "CB-PL (thr>=0.90, top-60/kelas, w=0.5)",
+      "representation": "transductive",
+      "strategy": "Self-training Class-Balanced: top-K per kelas + threshold + bobot pseudo 0.5; teacher=CalibratedLinearSVC",
+      "folds": [
+        0.6822,
+        0.7928,
+        0.6942,
+        0.7955,
+        0.6466
+      ],
+      "mean": 0.7223,
+      "std": 0.0607,
+      "config": {
+        "confidence_threshold": 0.9,
+        "top_k_per_class": 60,
+        "pseudo_weight": 0.5,
+        "teacher": "calibrated_linearsvc"
+      },
+      "runtime_seconds": 0.79
+    }
+  },
+  "diagnostics": {
+    "EXP-05": {
+      "config": {
+        "threshold": 0.9,
+        "top_k_per_class": null,
+        "pseudo_weight": 1.0
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "total_pseudo": 3696,
+          "pct_of_pool": 34.76,
+          "distribution": {
+            "negative": 80,
+            "neutral": 0,
+            "positive": 3616
+          },
+          "distribution_pct": {
+            "negative": 2.16,
+            "neutral": 0.0,
+            "positive": 97.84
+          },
+          "avg_confidence": 0.95
+        },
+        {
+          "fold": 1,
+          "total_pseudo": 2792,
+          "pct_of_pool": 26.26,
+          "distribution": {
+            "negative": 47,
+            "neutral": 0,
+            "positive": 2745
+          },
+          "distribution_pct": {
+            "negative": 1.68,
+            "neutral": 0.0,
+            "positive": 98.32
+          },
+          "avg_confidence": 0.9409
+        },
+        {
+          "fold": 2,
+          "total_pseudo": 3825,
+          "pct_of_pool": 35.97,
+          "distribution": {
+            "negative": 97,
+            "neutral": 0,
+            "positive": 3728
+          },
+          "distribution_pct": {
+            "negative": 2.54,
+            "neutral": 0.0,
+            "positive": 97.46
+          },
+          "avg_confidence": 0.95
+        },
+        {
+          "fold": 3,
+          "total_pseudo": 2982,
+          "pct_of_pool": 28.04,
+          "distribution": {
+            "negative": 60,
+            "neutral": 0,
+            "positive": 2922
+          },
+          "distribution_pct": {
+            "negative": 2.01,
+            "neutral": 0.0,
+            "positive": 97.99
+          },
+          "avg_confidence": 0.9448
+        },
+        {
+          "fold": 4,
+          "total_pseudo": 3137,
+          "pct_of_pool": 29.5,
+          "distribution": {
+            "negative": 34,
+            "neutral": 0,
+            "positive": 3103
+          },
+          "distribution_pct": {
+            "negative": 1.08,
+            "neutral": 0.0,
+            "positive": 98.92
+          },
+          "avg_confidence": 0.9433
+        }
+      ],
+      "summary": {
+        "total_pseudo_per_fold": [
+          3696,
+          2792,
+          3825,
+          2982,
+          3137
+        ],
+        "total_pseudo_mean": 3286.4,
+        "pct_of_pool_mean": 30.91,
+        "class_pct_mean": {
+          "positive": 98.11,
+          "negative": 1.89,
+          "neutral": 0.0
+        },
+        "ground_truth_pct": {
+          "positive": 58.33,
+          "negative": 31.33,
+          "neutral": 10.33
+        },
+        "avg_confidence_mean": 0.9458,
+        "confirmation_bias_flag": true,
+        "neutral_suppression_flag": true,
+        "notes": "Konfirmasi bias: proporsi pseudo 'positive' 98.1% jauh di atas ground truth 58.33%. Penindasan kelas netral: pseudo 'neutral' hanya 0.0% (ground truth 10.33%)."
+      }
+    },
+    "EXP-06A": {
+      "config": {
+        "threshold": 0.85,
+        "top_k_per_class": 30,
+        "pseudo_weight": 0.5
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "total_pseudo": 60,
+          "pct_of_pool": 0.56,
+          "distribution": {
+            "negative": 30,
+            "neutral": 0,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9641
+        },
+        {
+          "fold": 1,
+          "total_pseudo": 60,
+          "pct_of_pool": 0.56,
+          "distribution": {
+            "negative": 30,
+            "neutral": 0,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9526
+        },
+        {
+          "fold": 2,
+          "total_pseudo": 61,
+          "pct_of_pool": 0.57,
+          "distribution": {
+            "negative": 30,
+            "neutral": 1,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 49.18,
+            "neutral": 1.64,
+            "positive": 49.18
+          },
+          "avg_confidence": 0.9647
+        },
+        {
+          "fold": 3,
+          "total_pseudo": 61,
+          "pct_of_pool": 0.57,
+          "distribution": {
+            "negative": 30,
+            "neutral": 1,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 49.18,
+            "neutral": 1.64,
+            "positive": 49.18
+          },
+          "avg_confidence": 0.9583
+        },
+        {
+          "fold": 4,
+          "total_pseudo": 60,
+          "pct_of_pool": 0.56,
+          "distribution": {
+            "negative": 30,
+            "neutral": 0,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9524
+        }
+      ],
+      "summary": {
+        "total_pseudo_per_fold": [
+          60,
+          60,
+          61,
+          61,
+          60
+        ],
+        "total_pseudo_mean": 60.4,
+        "pct_of_pool_mean": 0.57,
+        "class_pct_mean": {
+          "positive": 49.67,
+          "negative": 49.67,
+          "neutral": 0.66
+        },
+        "ground_truth_pct": {
+          "positive": 58.33,
+          "negative": 31.33,
+          "neutral": 10.33
+        },
+        "avg_confidence_mean": 0.9584,
+        "confirmation_bias_flag": false,
+        "neutral_suppression_flag": true,
+        "notes": "Penindasan kelas netral: pseudo 'neutral' hanya 0.7% (ground truth 10.33%)."
+      }
+    },
+    "EXP-06B": {
+      "config": {
+        "threshold": 0.85,
+        "top_k_per_class": 60,
+        "pseudo_weight": 0.5
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "total_pseudo": 120,
+          "pct_of_pool": 1.13,
+          "distribution": {
+            "negative": 60,
+            "neutral": 0,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9588
+        },
+        {
+          "fold": 1,
+          "total_pseudo": 120,
+          "pct_of_pool": 1.13,
+          "distribution": {
+            "negative": 60,
+            "neutral": 0,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9469
+        },
+        {
+          "fold": 2,
+          "total_pseudo": 121,
+          "pct_of_pool": 1.14,
+          "distribution": {
+            "negative": 60,
+            "neutral": 1,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 49.59,
+            "neutral": 0.83,
+            "positive": 49.59
+          },
+          "avg_confidence": 0.9603
+        },
+        {
+          "fold": 3,
+          "total_pseudo": 121,
+          "pct_of_pool": 1.14,
+          "distribution": {
+            "negative": 60,
+            "neutral": 1,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 49.59,
+            "neutral": 0.83,
+            "positive": 49.59
+          },
+          "avg_confidence": 0.9531
+        },
+        {
+          "fold": 4,
+          "total_pseudo": 120,
+          "pct_of_pool": 1.13,
+          "distribution": {
+            "negative": 60,
+            "neutral": 0,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9464
+        }
+      ],
+      "summary": {
+        "total_pseudo_per_fold": [
+          120,
+          120,
+          121,
+          121,
+          120
+        ],
+        "total_pseudo_mean": 120.4,
+        "pct_of_pool_mean": 1.13,
+        "class_pct_mean": {
+          "positive": 49.84,
+          "negative": 49.84,
+          "neutral": 0.33
+        },
+        "ground_truth_pct": {
+          "positive": 58.33,
+          "negative": 31.33,
+          "neutral": 10.33
+        },
+        "avg_confidence_mean": 0.9531,
+        "confirmation_bias_flag": false,
+        "neutral_suppression_flag": true,
+        "notes": "Penindasan kelas netral: pseudo 'neutral' hanya 0.3% (ground truth 10.33%)."
+      }
+    },
+    "EXP-06C": {
+      "config": {
+        "threshold": 0.9,
+        "top_k_per_class": 30,
+        "pseudo_weight": 0.5
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "total_pseudo": 60,
+          "pct_of_pool": 0.56,
+          "distribution": {
+            "negative": 30,
+            "neutral": 0,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9641
+        },
+        {
+          "fold": 1,
+          "total_pseudo": 60,
+          "pct_of_pool": 0.56,
+          "distribution": {
+            "negative": 30,
+            "neutral": 0,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9526
+        },
+        {
+          "fold": 2,
+          "total_pseudo": 60,
+          "pct_of_pool": 0.56,
+          "distribution": {
+            "negative": 30,
+            "neutral": 0,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9663
+        },
+        {
+          "fold": 3,
+          "total_pseudo": 60,
+          "pct_of_pool": 0.56,
+          "distribution": {
+            "negative": 30,
+            "neutral": 0,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9598
+        },
+        {
+          "fold": 4,
+          "total_pseudo": 60,
+          "pct_of_pool": 0.56,
+          "distribution": {
+            "negative": 30,
+            "neutral": 0,
+            "positive": 30
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9524
+        }
+      ],
+      "summary": {
+        "total_pseudo_per_fold": [
+          60,
+          60,
+          60,
+          60,
+          60
+        ],
+        "total_pseudo_mean": 60.0,
+        "pct_of_pool_mean": 0.56,
+        "class_pct_mean": {
+          "positive": 50.0,
+          "negative": 50.0,
+          "neutral": 0.0
+        },
+        "ground_truth_pct": {
+          "positive": 58.33,
+          "negative": 31.33,
+          "neutral": 10.33
+        },
+        "avg_confidence_mean": 0.959,
+        "confirmation_bias_flag": false,
+        "neutral_suppression_flag": true,
+        "notes": "Penindasan kelas netral: pseudo 'neutral' hanya 0.0% (ground truth 10.33%)."
+      }
+    },
+    "EXP-06D": {
+      "config": {
+        "threshold": 0.9,
+        "top_k_per_class": 60,
+        "pseudo_weight": 0.5
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "total_pseudo": 120,
+          "pct_of_pool": 1.13,
+          "distribution": {
+            "negative": 60,
+            "neutral": 0,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9588
+        },
+        {
+          "fold": 1,
+          "total_pseudo": 107,
+          "pct_of_pool": 1.01,
+          "distribution": {
+            "negative": 47,
+            "neutral": 0,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 43.93,
+            "neutral": 0.0,
+            "positive": 56.07
+          },
+          "avg_confidence": 0.9534
+        },
+        {
+          "fold": 2,
+          "total_pseudo": 120,
+          "pct_of_pool": 1.13,
+          "distribution": {
+            "negative": 60,
+            "neutral": 0,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9611
+        },
+        {
+          "fold": 3,
+          "total_pseudo": 120,
+          "pct_of_pool": 1.13,
+          "distribution": {
+            "negative": 60,
+            "neutral": 0,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 50.0,
+            "neutral": 0.0,
+            "positive": 50.0
+          },
+          "avg_confidence": 0.9538
+        },
+        {
+          "fold": 4,
+          "total_pseudo": 94,
+          "pct_of_pool": 0.88,
+          "distribution": {
+            "negative": 34,
+            "neutral": 0,
+            "positive": 60
+          },
+          "distribution_pct": {
+            "negative": 36.17,
+            "neutral": 0.0,
+            "positive": 63.83
+          },
+          "avg_confidence": 0.9606
+        }
+      ],
+      "summary": {
+        "total_pseudo_per_fold": [
+          120,
+          107,
+          120,
+          120,
+          94
+        ],
+        "total_pseudo_mean": 112.2,
+        "pct_of_pool_mean": 1.06,
+        "class_pct_mean": {
+          "positive": 53.98,
+          "negative": 46.02,
+          "neutral": 0.0
+        },
+        "ground_truth_pct": {
+          "positive": 58.33,
+          "negative": 31.33,
+          "neutral": 10.33
+        },
+        "avg_confidence_mean": 0.9575,
+        "confirmation_bias_flag": false,
+        "neutral_suppression_flag": true,
+        "notes": "Penindasan kelas netral: pseudo 'neutral' hanya 0.0% (ground truth 10.33%)."
+      }
+    }
+  },
+  "best_config": {
+    "experiment": "EXP-05",
+    "name": "Self-training naive (thr>=0.90 global)",
+    "mean_macro_f1_cv": 0.7234,
+    "std_macro_f1_cv": 0.0363,
+    "representation": "transductive",
+    "base_model": "Self-training naive (thr>=0.90 global)",
+    "config": {
+      "confidence_threshold": 0.9,
+      "top_k_per_class": null,
+      "pseudo_weight": 1.0,
+      "teacher": "calibrated_linearsvc"
+    },
+    "final_fit": {
+      "vectorizer_corpus": "transductive TF-IDF",
+      "n_features": 110007,
+      "pseudo_labeling": {
+        "threshold": 0.9,
+        "top_k_per_class": null,
+        "pseudo_weight": 1.0,
+        "n_selected": 3597,
+        "pct_of_pool": 33.83,
+        "distribution": {
+          "negative": 102,
+          "neutral": 0,
+          "positive": 3495
+        },
+        "distribution_pct": {
+          "negative": 2.84,
+          "neutral": 0.0,
+          "positive": 97.16
+        },
+        "avg_confidence": 0.9488
+      }
+    }
+  },
+  "submission": {
+    "path": "submission.csv",
+    "n_rows": 1246,
+    "distribution": {
+      "positive": 778,
+      "negative": 340,
+      "neutral": 128
+    },
+    "distribution_pct": {
+      "positive": 62.44,
+      "negative": 27.29,
+      "neutral": 10.27
+    },
+    "verified": true,
+    "verifier_output": "[OK] /home/dicky/Downloads/G3_Semi_supervised/submission.csv valid (1246 baris)"
+  },
+  "teacher_confidence_profile_fold0": {
+    "logistic_regression_balanced": {
+      "p50": 0.5383,
+      "p90": 0.6929,
+      "p95": 0.7267,
+      "p99": 0.7792,
+      "n_ge_0.85": 2,
+      "n_ge_0.90": 0
+    },
+    "calibrated_linearsvc": {
+      "p50": 0.8172,
+      "p90": 0.9674,
+      "p95": 0.9778,
+      "p99": 0.9884,
+      "n_ge_0.85": 4745,
+      "n_ge_0.90": 3696
+    },
+    "complement_nb_norm": {
+      "p50": 0.3333,
+      "p90": 0.3333,
+      "p95": 0.3333,
+      "p99": 0.3333,
+      "n_ge_0.85": 0,
+      "n_ge_0.90": 0
+    },
+    "soft_voting_ensemble": {
+      "p50": 0.5634,
+      "p90": 0.6644,
+      "p95": 0.6789,
+      "p99": 0.7005,
+      "n_ge_0.85": 0,
+      "n_ge_0.90": 0
+    }
+  },
+  "teacher_choice": {
+    "teacher": "CalibratedLinearSVC (CalibratedClassifierCV(LinearSVC, cv=3))",
+    "reason": "CNB(norm=True) pada TF-IDF L1-normalized menghasilkan probabilitas ~uniform (max~0.333) dan LogisticRegression class_weight=balanced meratakan probabilitas; rata-rata soft-voting menekan max-prob pool ke p99=0.700 sehingga threshold 0.85 menyerap NOL pseudo-label (self-training kosong). Calibrated LinearSVC adalah satu-satunya anggota dengan probabilitas terkalibrasi sungguhan."
+  },
+  "protocol": {
+    "cv": "StratifiedKFold(n_splits=5, shuffle=True, random_state=42)",
+    "metric": "Macro-F1",
+    "anti_leakage": "validation fold tidak pernah dipakai untuk fitting vectorizer maupun pseudo-labeling",
+    "vectorizer_cache": "2x fitting per fold (inductive: train fold; transductive: train fold + pool unlabeled)",
+    "pool_unlabeled": 10633,
+    "n_labeled": 300
+  },
+  "runtimes_seconds": {
+    "load_and_clean": 0.17,
+    "vectorizer_cache": 21.69,
+    "teacher_profile": 2.89,
+    "experiments": 18.31,
+    "final_and_submission": 4.79,
+    "total": 48.12,
+    "EXP-00": 0.01,
+    "EXP-01": 4.13,
+    "EXP-02": 0.25,
+    "EXP-03": 0.02,
+    "EXP-04": 8.39,
+    "EXP-05": 2.38,
+    "EXP-06A": 0.77,
+    "EXP-06B": 0.79,
+    "EXP-06C": 0.78,
+    "EXP-06D": 0.79,
+    "final_training": 4.79
+  }
+}

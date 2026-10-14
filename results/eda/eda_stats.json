@@ -1,0 +1,604 @@
+{
+  "generated_by": "src/eda/run_eda.py (Jalur B - Fase 1 EDA)",
+  "dataset_summary": {
+    "labeled": {
+      "rows": 300,
+      "columns": [
+        "id",
+        "text",
+        "label"
+      ],
+      "null_per_column": {
+        "id": 0,
+        "text": 0,
+        "label": 0
+      },
+      "total_null": 0,
+      "duplicate_rows": 0
+    },
+    "unlabeled": {
+      "rows": 10633,
+      "columns": [
+        "id",
+        "text"
+      ],
+      "null_per_column": {
+        "id": 0,
+        "text": 0
+      },
+      "total_null": 0,
+      "duplicate_rows": 0
+    },
+    "test": {
+      "rows": 1246,
+      "columns": [
+        "id",
+        "text"
+      ],
+      "null_per_column": {
+        "id": 0,
+        "text": 0
+      },
+      "total_null": 0,
+      "duplicate_rows": 0
+    }
+  },
+  "class_distribution": {
+    "positive": {
+      "count": 175,
+      "percent": 58.33
+    },
+    "negative": {
+      "count": 94,
+      "percent": 31.33
+    },
+    "neutral": {
+      "count": 31,
+      "percent": 10.33
+    },
+    "total": 300
+  },
+  "word_length_stats": {
+    "labeled": {
+      "mean": 33.45,
+      "std": 20.87,
+      "q1": 17.0,
+      "median": 29.0,
+      "q3": 47.0,
+      "max": 96,
+      "min": 1,
+      "total_tokens": 10034
+    },
+    "unlabeled": {
+      "mean": 33.05,
+      "std": 21.15,
+      "q1": 16.0,
+      "median": 28.0,
+      "q3": 48.0,
+      "max": 110,
+      "min": 1,
+      "total_tokens": 351417
+    },
+    "test": {
+      "mean": 32.78,
+      "std": 20.86,
+      "q1": 16.0,
+      "median": 28.0,
+      "q3": 47.0,
+      "max": 100,
+      "min": 1,
+      "total_tokens": 40839
+    }
+  },
+  "vocabulary": {
+    "labeled": 2355,
+    "unlabeled": 17838,
+    "test": 5516,
+    "labeled_plus_unlabeled": 18090,
+    "tokenizer": "str.lower().split() (tokenisasi acuan AGENTS.md Bagian 2)"
+  },
+  "oov_analysis": {
+    "test_vs_labeled_only": {
+      "reference_vocab": "vocabulary(labeled)",
+      "reference_vocab_size": 2355,
+      "test_vocab_size": 5516,
+      "test_oov_unique_types": 3888,
+      "oov_rate_percent_types": 70.49,
+      "test_oov_token_occurrences": 6404,
+      "oov_rate_percent_tokens": 15.68
+    },
+    "test_vs_labeled_plus_unlabeled": {
+      "reference_vocab": "vocabulary(labeled + unlabeled)",
+      "reference_vocab_size": 18090,
+      "test_vocab_size": 5516,
+      "test_oov_unique_types": 1001,
+      "oov_rate_percent_types": 18.15,
+      "test_oov_token_occurrences": 1060,
+      "oov_rate_percent_tokens": 2.6
+    },
+    "oov_drop_percentage_points": 52.34
+  },
+  "top_informative_terms_per_class": {
+    "positive": {
+      "n_labeled_samples": 175,
+      "top_unigrams": [
+        {
+          "term": "pilihan",
+          "log_odds_ratio": 2.0346,
+          "doc_freq": 20
+        },
+        {
+          "term": "bandung",
+          "log_odds_ratio": 1.8988,
+          "doc_freq": 53
+        },
+        {
+          "term": "cukup",
+          "log_odds_ratio": 1.8804,
+          "doc_freq": 37
+        },
+        {
+          "term": "restoran",
+          "log_odds_ratio": 1.7934,
+          "doc_freq": 25
+        },
+        {
+          "term": "batagor",
+          "log_odds_ratio": 1.7626,
+          "doc_freq": 6
+        },
+        {
+          "term": "malam",
+          "log_odds_ratio": 1.6642,
+          "doc_freq": 25
+        },
+        {
+          "term": "makanan",
+          "log_odds_ratio": 1.6493,
+          "doc_freq": 81
+        },
+        {
+          "term": "luas",
+          "log_odds_ratio": 1.6291,
+          "doc_freq": 13
+        },
+        {
+          "term": "terlalu",
+          "log_odds_ratio": 1.555,
+          "doc_freq": 12
+        },
+        {
+          "term": "menu",
+          "log_odds_ratio": 1.5356,
+          "doc_freq": 36
+        },
+        {
+          "term": "nyaman",
+          "log_odds_ratio": 1.4749,
+          "doc_freq": 24
+        },
+        {
+          "term": "indah",
+          "log_odds_ratio": 1.4749,
+          "doc_freq": 10
+        },
+        {
+          "term": "menikmati",
+          "log_odds_ratio": 1.3879,
+          "doc_freq": 9
+        },
+        {
+          "term": "selain",
+          "log_odds_ratio": 1.3879,
+          "doc_freq": 10
+        },
+        {
+          "term": "anda",
+          "log_odds_ratio": 1.3879,
+          "doc_freq": 7
+        }
+      ],
+      "top_bigrams": [
+        {
+          "term": "nya enak",
+          "log_odds_ratio": 2.3912,
+          "doc_freq": 27
+        },
+        {
+          "term": "makanan nya",
+          "log_odds_ratio": 2.1681,
+          "doc_freq": 22
+        },
+        {
+          "term": "makan malam",
+          "log_odds_ratio": 1.6291,
+          "doc_freq": 11
+        },
+        {
+          "term": "di sini",
+          "log_odds_ratio": 1.6291,
+          "doc_freq": 25
+        },
+        {
+          "term": "enak dan",
+          "log_odds_ratio": 1.555,
+          "doc_freq": 11
+        },
+        {
+          "term": "tempat yang",
+          "log_odds_ratio": 1.555,
+          "doc_freq": 12
+        },
+        {
+          "term": "tempat nya",
+          "log_odds_ratio": 1.5158,
+          "doc_freq": 24
+        },
+        {
+          "term": "juga enak",
+          "log_odds_ratio": 1.3879,
+          "doc_freq": 10
+        },
+        {
+          "term": "harga nya",
+          "log_odds_ratio": 1.3879,
+          "doc_freq": 22
+        },
+        {
+          "term": "tempat makan",
+          "log_odds_ratio": 1.3879,
+          "doc_freq": 10
+        }
+      ]
+    },
+    "negative": {
+      "n_labeled_samples": 94,
+      "top_unigrams": [
+        {
+          "term": "dia",
+          "log_odds_ratio": 3.3252,
+          "doc_freq": 3
+        },
+        {
+          "term": "marah",
+          "log_odds_ratio": 3.2074,
+          "doc_freq": 7
+        },
+        {
+          "term": "gua",
+          "log_odds_ratio": 3.2074,
+          "doc_freq": 5
+        },
+        {
+          "term": "lo",
+          "log_odds_ratio": 3.0738,
+          "doc_freq": 3
+        },
+        {
+          "term": "bayar",
+          "log_odds_ratio": 2.9197,
+          "doc_freq": 5
+        },
+        {
+          "term": "malah",
+          "log_odds_ratio": 2.9197,
+          "doc_freq": 5
+        },
+        {
+          "term": "mengecewakan",
+          "log_odds_ratio": 2.9197,
+          "doc_freq": 4
+        },
+        {
+          "term": "pki",
+          "log_odds_ratio": 2.9197,
+          "doc_freq": 4
+        },
+        {
+          "term": "kayak",
+          "log_odds_ratio": 2.9197,
+          "doc_freq": 4
+        },
+        {
+          "term": "islam",
+          "log_odds_ratio": 2.9197,
+          "doc_freq": 4
+        },
+        {
+          "term": "muslim",
+          "log_odds_ratio": 2.7374,
+          "doc_freq": 3
+        },
+        {
+          "term": "agama",
+          "log_odds_ratio": 2.7374,
+          "doc_freq": 4
+        },
+        {
+          "term": "bek",
+          "log_odds_ratio": 2.7374,
+          "doc_freq": 3
+        },
+        {
+          "term": "kesal",
+          "log_odds_ratio": 2.7374,
+          "doc_freq": 4
+        },
+        {
+          "term": "negara",
+          "log_odds_ratio": 2.7374,
+          "doc_freq": 4
+        }
+      ],
+      "top_bigrams": [
+        {
+          "term": "tidak bisa",
+          "log_odds_ratio": 3.3252,
+          "doc_freq": 7
+        },
+        {
+          "term": "saya tidak",
+          "log_odds_ratio": 1.8211,
+          "doc_freq": 4
+        },
+        {
+          "term": "tidak enak",
+          "log_odds_ratio": 1.8211,
+          "doc_freq": 4
+        },
+        {
+          "term": "saya sudah",
+          "log_odds_ratio": 1.8211,
+          "doc_freq": 4
+        },
+        {
+          "term": "saja tidak",
+          "log_odds_ratio": 1.8211,
+          "doc_freq": 4
+        },
+        {
+          "term": "nya sudah",
+          "log_odds_ratio": 1.8211,
+          "doc_freq": 4
+        },
+        {
+          "term": "orang yang",
+          "log_odds_ratio": 1.8211,
+          "doc_freq": 4
+        },
+        {
+          "term": "di mana",
+          "log_odds_ratio": 1.5334,
+          "doc_freq": 3
+        },
+        {
+          "term": "rata rata",
+          "log_odds_ratio": 1.5334,
+          "doc_freq": 3
+        },
+        {
+          "term": "sampai sekarang",
+          "log_odds_ratio": 1.5334,
+          "doc_freq": 3
+        }
+      ]
+    },
+    "neutral": {
+      "n_labeled_samples": 31,
+      "top_unigrams": [
+        {
+          "term": "pilkada",
+          "log_odds_ratio": 3.5177,
+          "doc_freq": 3
+        },
+        {
+          "term": "2018",
+          "log_odds_ratio": 3.5177,
+          "doc_freq": 3
+        },
+        {
+          "term": "demokrat",
+          "log_odds_ratio": 2.8246,
+          "doc_freq": 4
+        },
+        {
+          "term": "rp",
+          "log_odds_ratio": 2.6423,
+          "doc_freq": 5
+        },
+        {
+          "term": "joko",
+          "log_odds_ratio": 2.5369,
+          "doc_freq": 3
+        },
+        {
+          "term": "pilgub",
+          "log_odds_ratio": 2.5369,
+          "doc_freq": 3
+        },
+        {
+          "term": "22",
+          "log_odds_ratio": 2.5369,
+          "doc_freq": 3
+        },
+        {
+          "term": "00",
+          "log_odds_ratio": 2.3546,
+          "doc_freq": 6
+        },
+        {
+          "term": "5",
+          "log_odds_ratio": 1.9083,
+          "doc_freq": 6
+        },
+        {
+          "term": "mendapatkan",
+          "log_odds_ratio": 1.8438,
+          "doc_freq": 3
+        },
+        {
+          "term": "melakukan",
+          "log_odds_ratio": 1.8438,
+          "doc_freq": 5
+        },
+        {
+          "term": "tambahan",
+          "log_odds_ratio": 1.726,
+          "doc_freq": 3
+        },
+        {
+          "term": "tak",
+          "log_odds_ratio": 1.726,
+          "doc_freq": 3
+        },
+        {
+          "term": "6",
+          "log_odds_ratio": 1.726,
+          "doc_freq": 3
+        },
+        {
+          "term": "membeli",
+          "log_odds_ratio": 1.726,
+          "doc_freq": 3
+        }
+      ],
+      "top_bigrams": [
+        {
+          "term": "hari ini",
+          "log_odds_ratio": 1.726,
+          "doc_freq": 3
+        },
+        {
+          "term": "pada tanggal",
+          "log_odds_ratio": 1.726,
+          "doc_freq": 3
+        },
+        {
+          "term": "yang benar",
+          "log_odds_ratio": 1.4383,
+          "doc_freq": 4
+        },
+        {
+          "term": "buat yang",
+          "log_odds_ratio": 1.4383,
+          "doc_freq": 4
+        },
+        {
+          "term": "terima kasih",
+          "log_odds_ratio": 1.4383,
+          "doc_freq": 4
+        },
+        {
+          "term": "dan suasana",
+          "log_odds_ratio": 1.4383,
+          "doc_freq": 4
+        },
+        {
+          "term": "saya tidak",
+          "log_odds_ratio": 1.4383,
+          "doc_freq": 4
+        },
+        {
+          "term": "tidak suka",
+          "log_odds_ratio": 1.4383,
+          "doc_freq": 4
+        },
+        {
+          "term": "yang disajikan",
+          "log_odds_ratio": 1.0328,
+          "doc_freq": 6
+        },
+        {
+          "term": "dan enak",
+          "log_odds_ratio": 0.7452,
+          "doc_freq": 3
+        }
+      ]
+    }
+  },
+  "chi2_top_ngrams_figure": {
+    "unigram": {
+      "terms": [
+        "nya",
+        "makanan",
+        "dan",
+        "yang",
+        "enak",
+        "di",
+        "tempat",
+        "dengan",
+        "makan",
+        "bandung",
+        "cukup",
+        "menu",
+        "untuk",
+        "pilkada",
+        "pdip"
+      ],
+      "scores": [
+        84.2,
+        55.87,
+        46.99,
+        46.93,
+        45.46,
+        44.45,
+        42.96,
+        38.35,
+        34.61,
+        33.5,
+        32.79,
+        29.51,
+        28.04,
+        26.03,
+        26.03
+      ]
+    },
+    "bigram": {
+      "terms": [
+        "nya enak",
+        "tidak bisa",
+        "presiden joko",
+        "joko widodo",
+        "anies baswedan",
+        "di pilgub",
+        "di sini",
+        "makanan nya",
+        "tempat nya",
+        "harga nya",
+        "nya juga",
+        "makan malam",
+        "kota bandung",
+        "tempat yang",
+        "enak dan"
+      ],
+      "scores": [
+        20.71,
+        17.53,
+        17.35,
+        17.35,
+        17.35,
+        17.35,
+        16.75,
+        16.43,
+        14.62,
+        12.51,
+        11.78,
+        9.29,
+        9.0,
+        8.57,
+        8.57
+      ]
+    },
+    "meta": {
+      "min_df": 2,
+      "ngram_range_unigram": [
+        1,
+        1
+      ],
+      "ngram_range_bigram": [
+        2,
+        2
+      ]
+    }
+  }
+}

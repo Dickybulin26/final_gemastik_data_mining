@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slide Presentasi — Semi-Supervised Sentiment Classification (GEMASTIK)</title>
+<style>
+  /* ===== Deck 16:9, mandiri tanpa CDN/aset eksternal ===== */
+  :root{
+    --w: min(96vw, 168vh);            /* lebar deck 16:9 yang selalu muat layar */
+    --ink: #16213e;
+    --muted: #5a6785;
+    --accent: #2f5fe0;
+    --accent2: #0f9d8f;
+    --warn: #c2410c;
+    --card: #ffffff;
+    --line: #dfe4f0;
+    --chip-bg: #eef3ff;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: radial-gradient(1200px 700px at 20% -10%, #1f2f5c 0%, #111a33 55%, #0b1124 100%);
+    color: var(--ink);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap: calc(var(--w) * 0.014);
+    padding: calc(var(--w) * 0.015);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .deck{
+    position: relative;
+    width: var(--w);
+    height: calc(var(--w) * 9 / 16);
+    background: var(--card);
+    border-radius: calc(var(--w) * 0.018);
+    box-shadow: 0 calc(var(--w)*0.02) calc(var(--w)*0.06) rgba(0,0,0,.45);
+    overflow: hidden;
+  }
+
+  .slide{
+    position:absolute; inset:0;
+    display:none;
+    flex-direction:column;
+    padding: calc(var(--w)*0.042) calc(var(--w)*0.05) calc(var(--w)*0.036);
+    background:
+      linear-gradient(180deg, #ffffff 0%, #fbfcff 62%, #f4f7ff 100%);
+  }
+  .slide.active{ display:flex; }
+  .slide::after{ /* aksen bawah */
+    content:""; position:absolute; left:0; right:0; bottom:0;
+    height: calc(var(--w)*0.007);
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 55%, #f2b705 100%);
+  }
+
+  .eyebrow{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size: calc(var(--w)*0.0135); letter-spacing:.14em; text-transform:uppercase;
+    color: var(--accent); font-weight:700;
+  }
+  .eyebrow .tag{ color: var(--muted); font-weight:600; letter-spacing:.08em; }
+
+  h1{
+    margin: calc(var(--w)*0.014) 0 calc(var(--w)*0.016);
+    font-size: calc(var(--w)*0.036);
+    line-height:1.15;
+    font-weight:800;
+    letter-spacing:-0.015em;
+  }
+
+  .stats{
+    display:flex; flex-wrap:wrap; gap: calc(var(--w)*0.01);
+    margin-bottom: calc(var(--w)*0.022);
+  }
+  .chip{
+    background: var(--chip-bg);
+    border:1px solid #d7e0fb;
+    color:#1c3a8f;
+    font-size: calc(var(--w)*0.015);
+    font-weight:700;
+    padding: calc(var(--w)*0.007) calc(var(--w)*0.013);
+    border-radius: 999px;
+    white-space:nowrap;
+  }
+  .chip b{ color: var(--accent2); }
+
+  ul.points{
+    list-style:none; margin:0; padding:0;
+    display:flex; flex-direction:column; gap: calc(var(--w)*0.017);
+    flex:1 1 auto;
+  }
+  ul.points > li{
+    position:relative;
+    padding-left: calc(var(--w)*0.026);
+    font-size: calc(var(--w)*0.0185);
+    line-height:1.5;
+    color:#26324f;
+  }
+  ul.points > li::before{
+    content:"";
+    position:absolute; left:0; top: calc(var(--w)*0.009);
+    width: calc(var(--w)*0.011); height: calc(var(--w)*0.011);
+    border-radius:3px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+  }
+  ul.points b, ul.points strong{ color: var(--ink); }
+  ul.points .hl{ color: var(--accent); font-weight:800; }
+  ul.points .warn{ color: var(--warn); font-weight:800; }
+  ul.points ol{
+    margin: calc(var(--w)*0.008) 0 0;
+    padding-left: calc(var(--w)*0.026);
+    display:flex; flex-direction:column; gap: calc(var(--w)*0.006);
+    font-size: calc(var(--w)*0.017);
+  }
+
+  .foot{
+    margin-top: calc(var(--w)*0.018);
+    display:flex; justify-content:space-between; align-items:center;
+    font-size: calc(var(--w)*0.0125); color: var(--muted);
+    border-top:1px dashed var(--line);
+    padding-top: calc(var(--w)*0.012);
+  }
+  .foot .ph{ color:#8a5cf6; font-weight:700; }
+
+  /* ===== Navigasi ===== */
+  .nav{
+    display:flex; align-items:center; gap: calc(var(--w)*0.016);
+    color:#e7ecff; user-select:none;
+  }
+  .nav button{
+    font:inherit; cursor:pointer;
+    width: calc(var(--w)*0.045); height: calc(var(--w)*0.045);
+    min-width:34px; min-height:34px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.10);
+    color:#fff; font-size: calc(var(--w)*0.02);
+    display:flex; align-items:center; justify-content:center;
+    transition: background .15s ease, transform .1s ease;
+  }
+  .nav button:hover{ background: rgba(255,255,255,.24); }
+  .nav button:active{ transform: scale(.94); }
+  .nav button:disabled{ opacity:.35; cursor:default; }
+  .dots{ display:flex; gap: calc(var(--w)*0.009); }
+  .dots span{
+    width: calc(var(--w)*0.012); height: calc(var(--w)*0.012);
+    min-width:9px; min-height:9px;
+    border-radius:50%; background: rgba(255,255,255,.28);
+    cursor:pointer;
+  }
+  .dots span.on{ background:#f2b705; box-shadow:0 0 0 3px rgba(242,183,5,.25); }
+  .counter{ font-size: calc(var(--w)*0.017); font-weight:700; letter-spacing:.06em; min-width: calc(var(--w)*0.07); text-align:center; }
+  .hint{ font-size: calc(var(--w)*0.0135); color: rgba(231,236,255,.72); }
+</style>
+</head>
+<body>
+
+<main class="deck" id="deck">
+
+  <!-- ===================== SLIDE 1 ===================== -->
+  <section class="slide active">
+    <div class="eyebrow"><span>Slide 1 · Masalah Bisnis &amp; SDG</span><span class="tag">±45 detik</span></div>
+    <h1>Inovasi Klasifikasi Sentimen Hemat Biaya Berbasis Semi-Supervised Learning</h1>
+    <div class="stats">
+      <span class="chip">300 label</span>
+      <span class="chip">10.633 unlabeled</span>
+      <span class="chip">1.246 test</span>
+      <span class="chip">Metrik: <b>Macro-F1</b></span>
+    </div>
+    <ul class="points">
+      <li><b>Masalah bisnis:</b> anggaran industri hanya cukup menganotasi <b>300 ulasan</b> dari <b>10.633 ulasan mentah</b> — 97% sisanya buta label.</li>
+      <li><b>Pertanyaan inti:</b> apakah data tanpa label adalah <b>aset bernilai (boon)</b> atau justru <b>racun (bane)</b> bagi model — noisy &amp; <i>confirmation bias</i>?</li>
+      <li><b>Jawaban singkat kami (terukur):</b> Macro-F1 naik dari baseline <span class="hl">0,6566</span> ke <span class="hl">0,7573</span> (5/5 lipatan) hanya dengan <b>200 pseudo-label</b> pilihan.</li>
+      <li><b>Solusi kami:</b> <b>Class-Balanced Pseudo-Labeling (CB-PL)</b> + <i>sample weighting</i> lemah (w=0,1) — pelatihan hitungan detik, nol risiko OOM, dapat diverifikasi ulang.</li>
+      <li><b>SDG 8 (Decent Work):</b> efisiensi biaya anotasi &amp; optimasi beban kerja tim label — 10.633 ulasan diproses otomatis, anggaran fokus pada 300 label bernilai tinggi.</li>
+      <li><b>SDG 9 (Industry &amp; Innovation):</b> infrastruktur AI adaptif yang mengubah data mentah tak berlabel skala besar menjadi inteligensi bisnis.</li>
+    </ul>
+    <div class="foot"><span>GEMASTIK Penambangan Data · Jalur C</span><span>SDG 8 &amp; SDG 9 · <span class="ph">0,6566 → 0,7573</span> (notebook Bagian 9)</span></div>
+  </section>
+
+  <!-- ===================== SLIDE 2 ===================== -->
+  <section class="slide">
+    <div class="eyebrow"><span>Slide 2 · Eksplorasi Data (EDA)</span><span class="tag">±60 detik</span></div>
+    <h1>Dua Temuan Kritis yang Membentuk Seluruh Desain Solusi</h1>
+    <div class="stats">
+      <span class="chip">58,3% / 31,3% / 10,3%</span>
+      <span class="chip">OOV <b>70,49% → 18,15%</b></span>
+      <span class="chip">~33 kata / ulasan</span>
+    </div>
+    <ul class="points">
+      <li><b>Temuan 1 — Ketimpangan kelas ekstrem:</b> positive 175 (58,3%) · negative 94 (31,3%) · <span class="warn">neutral hanya 31 (10,3%)</span> → model naif akan mematikan kelas netral.</li>
+      <li><b>Temuan 2 — Jurang OOV masif:</b> <span class="hl">70,49%</span> kata data uji tidak pernah ada di 300 data latih; bergabung dengan korpus unlabeled, OOV anjlok ke <span class="hl">18,15%</span> (kosa kata 2.355 → 17.838 unik) — bukti empiris mutlak nilai data tanpa label.</li>
+      <li><b>Karakteristik teks:</b> rata-rata ~33 kata di <i>ketiga</i> dataset (latih/unlabeled/uji) → satu distribusi sumber yang sama; multi-domain (kuliner, transportasi, politik) penuh slang (<code>bgt</code>, <code>gak</code>, <code>aja</code>).</li>
+      <li><b>Implikasi desain:</b> dibutuhkan representasi tahan-OOV (char n-gram) + mekanisme anti-<i>confirmation bias</i> yang eksplisit, bukan threshold global tunggal.</li>
+    </ul>
+    <div class="foot"><span>Sumber: AGENTS.md §2 · notebook Bagian 2–3</span><span>Angka EDA final: <span class="ph">70,49% → 18,15%</span> · kosa kata 2.355 → 17.838</span></div>
+  </section>
+
+  <!-- ===================== SLIDE 3 ===================== -->
+  <section class="slide">
+    <div class="eyebrow"><span>Slide 3 · Metodologi &amp; Arsitektur SSL</span><span class="tag">±75 detik</span></div>
+    <h1>Tiga Pilar: Representasi Transductive · Guru Terkalibrasi · CB-PL Anti-Bias</h1>
+    <div class="stats">
+      <span class="chip">TF-IDF word(1,2) + char(3,5)</span>
+      <span class="chip">teacher &amp; model: <b>Calibrated LinearSVC</b></span>
+      <span class="chip">Stratified 5-Fold · seed 42</span>
+    </div>
+    <ul class="points">
+      <li><b>Pilar 1 — Representasi transductive:</b> kosakata TF-IDF di-fit pada gabungan <b>300 + 10.633 = 10.933 teks</b> (word 1–2 + char 3–5; ±110 rb fitur vs ±9 rb supervised-only); sah &amp; tanpa kebocoran label karena hanya memakai distribusi <i>unsupervised</i> — validation fold tidak ikut di-fit.</li>
+      <li><b>Pilar 2 — Guru terkalibrasi, bukan ensemble lemah:</b> untuk pseudo-label dipakai <b>Calibrated LinearSVC</b> (Platt scaling) sebagai <i>teacher</i> <b>sekaligus</b> model akhir, sehingga ambang keyakinan τ bermakna; <i>soft voting</i> justru meredam probabilitas (maksimum ±0,70) sehingga threshold tinggi menyerap nol sampel — terbukti saat diuji.</li>
+      <li><b>Pilar 3 — CB-PL anti-bias:</b> kuota <b>Top-K per kelas</b> (bukan threshold global tunggal) + ambang keyakinan dari grid <b>{0,80; 0,85; 0,90} × K=100/kelas</b> → terbaik <b>τ=0,85</b> agar pseudo-label tidak dimonopoli kelas positive.</li>
+      <li><b>Sample weighting lemah:</b> ground truth bobot 1,0 vs pseudo-label bobot <b>0,1</b> — bobot besar merusak (w=0,8 → 0,6059); hanya <b>200 pseudo-label (1,88% pool)</b> tersaring, 300 label asli tetap dominan.</li>
+      <li><b>Aturan seleksi terdaftar:</b> semua konfigurasi dinilai pada lipatan identik; model final = <b>mean Macro-F1 CV tertinggi</b> — bukan pilihan pascafakta.</li>
+      <li><b>Validasi steril:</b> Stratified 5-Fold CV (seed 42), fold validasi <b>tidak pernah</b> terpapar pseudo-label maupun penyetelan threshold (anti <i>data leakage</i>).</li>
+    </ul>
+    <div class="foot"><span>notebook Bagian 4 &amp; 7 · progress-tracker Bagian 2</span><span>Konfigurasi final: <b>EXP-08 — CB-PL teacher &amp; model Calibrated LinearSVC, τ=0,85, K=100/kelas, w=0,1</b></span></div>
+  </section>
+
+  <!-- ===================== SLIDE 4 ===================== -->
+  <section class="slide">
+    <div class="eyebrow"><span>Slide 4 · Hasil Komparasi &amp; Keterbatasan</span><span class="tag">±75 detik</span></div>
+    <h1>Baseline vs Semi-Supervised — Angka, Diagnostik, dan Kejujuran Ilmiah</h1>
+    <div class="stats">
+      <span class="chip">Baseline <b>0,6566</b></span>
+      <span class="chip">SSL <b>0,7573</b></span>
+      <span class="chip">Δ <b>+0,1007</b></span>
+      <span class="chip">menang <b>5/5 fold</b> · p=0,022</span>
+    </div>
+    <ul class="points">
+      <li><b>Model final EXP-08 (teacher SVC → model SVC, τ=0,85; K=100/kelas; w=0,1; 1 iterasi):</b> <span class="hl">0,7573 ± 0,0549</span> vs baseline terkuat EXP-04a Calibrated LinearSVC transductive <b>0,6566 ± 0,0533</b> — <b>Δ +0,1007</b>, menang <b>5/5 fold</b>, p=0,022 (lipatan identik, seed 42).</li>
+      <li><b>Deretan 5-Fold CV:</b> Dummy 0,2456 · LR supervised-only 0,6396 · ensemble transductive 0,6476 (dari 0,6186, +0,0290) · self-training naif EXP-05 0,6278 (turun −0,0188) · CB-PL ENS→ENS 0,7129 (+0,0653) · CB-PL ENS→SVC 0,7460 (+0,0894) · CB-PL final 0,7573 (+0,1007).</li>
+      <li><b>Diagnostik pseudo-label:</b> EXP-05 naif menyerap <b>±2.127/fold (±20% pool)</b> → <span class="warn">99,0% positive / 1,0% negative / 0,0% neutral</span>, keyakinan 0,664 → skor justru turun 0,6476 → 0,6278 (confirmation bias empiris); EXP-08 hanya <b>200 pseudo (1,88% pool)</b> → 50,0/50,0/0,0, keyakinan ±0,85 — kualitas mengalahkan kuantitas.</li>
+      <li><b>Ablasi (jujur):</b> seleksi global tanpa kuota kelas = <b>0,5970</b> (jatuh di bawah baseline); bobot besar w=0,8 → <b>0,6059</b>; 2 iterasi → 0,7008; CB-PL pada fitur supervised-only = <b>0,6343</b> (butuh fitur transductive); grid τ ∈ {0,80; 0,85; 0,90} × K=100 maks 0,7573 tepat di τ=0,85.</li>
+      <li><b>Inferensi &amp; keterbatasan (jujur):</b> <code>submission.csv</code> 1.246 baris lolos <b>[OK]</b> — positive 750 (60,2%) / negative 350 (28,1%) / neutral 146 (11,7%); p=0,022 pada 5 lipatan tetap estimasi kasar, tuning pada CV sama berpotensi optimistik, dan <b>pseudo-label neutral ≈ 0%</b> → kelas netral dialihkan ke <i>active learning</i>.</li>
+    </ul>
+    <div class="foot"><span>Sumber angka: notebook.ipynb Bagian 9–10 · progress-tracker Bagian 2–3</span><span>Semua placeholder sudah terisi — lihat <span class="ph">PLACEHOLDERS.md</span></span></div>
+  </section>
+
+  <!-- ===================== SLIDE 5 ===================== -->
+  <section class="slide">
+    <div class="eyebrow"><span>Slide 5 · Rekomendasi Bisnis &amp; Active Learning</span><span class="tag">±60 detik</span></div>
+    <h1>Dari Eksperimen ke Anggaran: 300 Label Berikutnya Dipakai untuk Apa?</h1>
+    <div class="stats">
+      <span class="chip">300 label berikutnya</span>
+      <span class="chip">Sisa OOV <b>18,15%</b></span>
+      <span class="chip">Selaras <b>SDG 8 &amp; 9</b></span>
+    </div>
+    <ul class="points">
+      <li><b>Rekomendasi implementasi:</b> gunakan pipeline <b>semi-supervised hybrid</b> (terbukti 0,6566 → 0,7573) sebagai penyaring opini konsumen otomatis hemat biaya; label manusia dialihkan ke titik dengan nilai informasi tertinggi.</li>
+      <li><b>Strategi alokasi 300 label berikutnya (Active Learning):</b>
+        <ol>
+          <li><b>Uncertainty / Margin Sampling</b> — labeli ulasan dengan entropi tertinggi (dekat margin keputusan negatif vs netral).</li>
+          <li><b>Minority-Class Boosting</b> — prioritaskan ulasan berprobabilitas tinggi kelas <code>neutral</code> (saat ini hanya 31 sampel; pseudo-label ≈ 0%).</li>
+          <li><b>Diversity Sampling</b> — K-Means pada representasi TF-IDF data unlabeled untuk meliput topik/domain baru yang belum tercakup.</li>
+        </ol>
+      </li>
+      <li><b>Mitigasi lanjutan:</b> <i>human-in-the-loop</i> untuk sampel ambig + pemantauan <i>drift</i> berkala pada pseudo-label produksi.</li>
+      <li><b>Penutup:</b> data tanpa label = leverage murah — OOV 70,49% → 18,15%, Macro-F1 0,6566 → 0,7573 — asalkan dijaga kuota kelas, bobot kecil (0,1), dan validasi yang steril. <b>Selaras SDG 8 &amp; 9.</b></li>
+    </ul>
+    <div class="foot"><span>Terima kasih · Q&amp;A 5 menit</span><span>Lembar pertahanan: <span class="ph">defense_sheet.md</span></span></div>
+  </section>
+
+</main>
+
+<nav class="nav" aria-label="Navigasi slide">
+  <button id="prev" title="Slide sebelumnya (←)" aria-label="Slide sebelumnya">◀</button>
+  <div class="dots" id="dots" aria-hidden="true"></div>
+  <span class="counter" id="counter">1 / 5</span>
+  <div class="dots" id="dots2" aria-hidden="true"></div>
+  <button id="next" title="Slide berikutnya (→)" aria-label="Slide berikutnya">▶</button>
+  <span class="hint">← → untuk berpindah</span>
+</nav>
+
+<script>
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var counter = document.getElementById('counter');
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  var dotsWraps = [document.getElementById('dots'), document.getElementById('dots2')];
+  var i = 0;
+
+  // titik navigasi (kiri & kanan)
+  dotsWraps.forEach(function (wrap) {
+    slides.forEach(function (_, k) {
+      var d = document.createElement('span');
+      d.addEventListener('click', function () { go(k); });
+      wrap.appendChild(d);
+    });
+  });
+
+  function go(k) {
+    if (k < 0) k = 0;
+    if (k > slides.length - 1) k = slides.length - 1;
+    slides[i].classList.remove('active');
+    i = k;
+    slides[i].classList.add('active');
+    counter.textContent = (i + 1) + ' / ' + slides.length;
+    prev.disabled = (i === 0);
+    next.disabled = (i === slides.length - 1);
+    dotsWraps.forEach(function (wrap) {
+      Array.prototype.forEach.call(wrap.children, function (d, idx) {
+        d.className = (idx === i) ? 'on' : '';
+      });
+    });
+  }
+
+  prev.addEventListener('click', function () { go(i - 1); });
+  next.addEventListener('click', function () { go(i + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(i + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(i - 1); }
+    if (e.key === 'Home') { go(0); }
+    if (e.key === 'End') { go(slides.length - 1); }
+  });
+
+  go(0);
+</script>
+</body>
+</html>
